@@ -26,7 +26,7 @@ public class GlobalExceptionHandlerController {
     public ResponseEntity<?> handleForumApiException(ForumApiException exception) {
         ForumApiExceptionResponse exceptionResponse = new ForumApiExceptionResponse(exception);
         LOGGER.error("Global Exception Handler {}", exceptionResponse);
-        return new ResponseEntity(exceptionResponse, exception.getStatus());
+        return new ResponseEntity<>(exceptionResponse, exception.getStatus());
     }
 
 }

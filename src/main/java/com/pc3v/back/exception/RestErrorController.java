@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus.Series;
@@ -26,12 +27,16 @@ public class RestErrorController extends BasicErrorController {
         ErrorAttributes errorAttributes) {
         super(errorAttributes, new ErrorProperties());
     }
+    ErrorAttributeOptions options = ErrorAttributeOptions
+            .defaults()
+            .including(ErrorAttributeOptions.Include.MESSAGE)
+            ;
 
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ForumApiExceptionResponse> jsonError(HttpServletRequest request) {
         LOGGER.error("parse JSON error [code: {}, attributes: {}]",
             this.getStatus(request),
-            this.getErrorAttributes(request, false));
+            this.getErrorAttributes(request, options));
 
         HttpStatus status = this.getStatus(request);
         ForumApiExceptionResponse exceptionResponse = new ForumApiExceptionResponse();
@@ -39,13 +44,13 @@ public class RestErrorController extends BasicErrorController {
         exceptionResponse.setStatusCode(status.value());
         exceptionResponse
             .setMessage((String)
-                this.getErrorAttributes(request, false).get("message"));
+                this.getErrorAttributes(request, options).get("message"));
         exceptionResponse
             .setPath((String)
-                this.getErrorAttributes(request, false).get("path"));
+                this.getErrorAttributes(request, options).get("path"));
         exceptionResponse
             .setTimestamp((Date)
-                this.getErrorAttributes(request, false).get("timestamp"));
+                this.getErrorAttributes(request, options).get("timestamp"));
         if (status.series() == Series.CLIENT_ERROR) {
             exceptionResponse.setErrorCode(ErrorCode.CLIENT_ERROR);
         } else if (status.series() == Series.SERVER_ERROR) {

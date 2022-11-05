@@ -2,7 +2,7 @@ package com.pc3v.back.security.jwt;
 
 import java.util.Date;
 
-import com.pc3v.back.security.services.UserDetailsImpl;
+import com.pc3v.back.servicesImpl.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

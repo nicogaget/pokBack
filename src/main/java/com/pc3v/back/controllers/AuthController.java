@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pc3v.back.repository.RoleRepository;
 import com.pc3v.back.repository.UserRepository;
 import com.pc3v.back.security.jwt.JwtUtils;
-import com.pc3v.back.security.services.UserDetailsImpl;
+import com.pc3v.back.servicesImpl.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
