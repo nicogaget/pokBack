@@ -6,52 +6,58 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-@Entity
+@Entity(name = "posts")
+@Table(name = "posts")
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 4235393151425571253L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @JoinColumn(name = "topic_id")
     private Topic topic;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name="content",columnDefinition = "TEXT")
     private String content;
 
-    @Column(updatable = false, nullable = false)
-    private Date creationDate;
+    @Column(name="created_at",updatable = false, nullable = false)
+    private Date createAt;
 
-    @Column(nullable = false)
-    private Date lastUpdateDate;
+    @Column(name="updated_at",nullable = false)
+    private Date updatedAt;
 
     public Post() {
     }
 
     @PrePersist
     protected void onCreate() {
-        this.creationDate = new Date();
-        this.lastUpdateDate = new Date();
+        this.createAt = new Date();
+        this.updatedAt = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.lastUpdateDate = new Date();
+        this.updatedAt = new Date();
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long idPost) {
-        this.id = idPost;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Topic getTopic() {
@@ -78,85 +84,19 @@ public class Post implements Serializable {
         this.content = content;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreatedAt() {
+        return createAt;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setCreatedAt(Date created_at) {
+        this.createAt = created_at;
     }
 
-    public Date getLastUpdateDate() {
-        return lastUpdateDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setLastUpdateDate(Date lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((content == null) ? 0 : content.hashCode());
-        result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
-        //result = prime * result + id;
-        result = prime * result + ((lastUpdateDate == null) ? 0 : lastUpdateDate.hashCode());
-        result = prime * result + ((topic == null) ? 0 : topic.hashCode());
-        result = prime * result + ((user == null) ? 0 : user.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Post other = (Post) obj;
-        if (content == null) {
-            if (other.content != null) {
-                return false;
-            }
-        } else if (!content.equals(other.content)) {
-            return false;
-        }
-        if (creationDate == null) {
-            if (other.creationDate != null) {
-                return false;
-            }
-        } else if (!creationDate.equals(other.creationDate)) {
-            return false;
-        }
-        if (id != other.id) {
-            return false;
-        }
-        if (lastUpdateDate == null) {
-            if (other.lastUpdateDate != null) {
-                return false;
-            }
-        } else if (!lastUpdateDate.equals(other.lastUpdateDate)) {
-            return false;
-        }
-        if (topic == null) {
-            if (other.topic != null) {
-                return false;
-            }
-        } else if (!topic.equals(other.topic)) {
-            return false;
-        }
-        if (user == null) {
-            if (other.user != null) {
-                return false;
-            }
-        } else if (!user.equals(other.user)) {
-            return false;
-        }
-        return true;
+    public void setUpdatedAt(Date updated_at) {
+        this.updatedAt = updated_at;
     }
 }

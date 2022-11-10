@@ -2,15 +2,16 @@ package com.pc3v.back.models;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "roles")
 @Table(name = "roles")
 public class Role {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name="id")
   private Integer id;
 
   @Enumerated(EnumType.STRING)
-  @Column(length = 20)
+  @Column(name="name",length = 20)
   private ERole name;
 
   public Role() {

@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 
-@Entity
+@Entity(name = "sections")
 @Table(name = "sections")
 public class Section implements Serializable {
 
@@ -13,12 +13,13 @@ public class Section implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(length = 50)
+    @Column(name="name",length = 50)
     private String name;
 
-    @Column(length = 150)
+    @Column(name="description",length = 150)
     private String description;
 
     public Section() {

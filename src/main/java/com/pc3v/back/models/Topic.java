@@ -1,61 +1,82 @@
-/**
- * Created by Dawid Stankiewicz on 17.07.2016
- */
 package com.pc3v.back.models;
 
+
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
-
-@Entity
+@Getter
+@Setter
+@ToString
+@Entity(name = "topics")
+@Table(name="topics")
 public class Topic implements Serializable {
 
     private static final long serialVersionUID = -1722083052479276312L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @JoinColumn(name = "section_id")
     private Section section;
 
-    @Column(length = 50)
+    @Column(name="title",length = 50)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name="content",columnDefinition = "TEXT")
     private String content;
 
-    @Column
+    @Column(name="views")
     private int views;
 
-    @Column(updatable = false, nullable = false)
-    private Date creationDate;
+    @Column(name="created_at",updatable = false, nullable = false)
+    private Date createdAt;
 
-    @Column
-    private Date lastUpdateDate;
+    @Column(name="updated_at")
+    private Date updatedAt;
 
-    @Column
+    @Column(name="closed")
     private boolean closed;
 
     public Topic() {
     }
 
+    public Topic(Long id, User user, Section section, String title, String content, int views, Date createdAt, Date updatedAt, boolean closed) {
+        this.id = id;
+        this.user = user;
+        this.section = section;
+        this.title = title;
+        this.content = content;
+        this.views = views;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.closed = closed;
+    }
+
     @PrePersist
     protected void onCreate() {
-        this.creationDate = new Date();
-        this.lastUpdateDate = new Date();
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.lastUpdateDate = new Date();
+        this.updatedAt = new Date();
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public Long getId() {
@@ -106,12 +127,20 @@ public class Topic implements Serializable {
         this.views = views;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public Date getLastUpdateDate() {
-        return lastUpdateDate;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public boolean isClosed() {
@@ -123,84 +152,15 @@ public class Topic implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (closed ? 1231 : 1237);
-        result = prime * result + ((content == null) ? 0 : content.hashCode());
-        result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
-       // result = prime * result + id;
-        result = prime * result + ((lastUpdateDate == null) ? 0 : lastUpdateDate.hashCode());
-        result = prime * result + ((section == null) ? 0 : section.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
-        result = prime * result + ((user == null) ? 0 : user.hashCode());
-        result = prime * result + views;
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Topic topic = (Topic) o;
+        return id != null && Objects.equals(id, topic.id);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Topic other = (Topic) obj;
-        if (closed != other.closed) {
-            return false;
-        }
-        if (content == null) {
-            if (other.content != null) {
-                return false;
-            }
-        } else if (!content.equals(other.content)) {
-            return false;
-        }
-        if (creationDate == null) {
-            if (other.creationDate != null) {
-                return false;
-            }
-        } else if (!creationDate.equals(other.creationDate)) {
-            return false;
-        }
-        if (id != other.id) {
-            return false;
-        }
-        if (lastUpdateDate == null) {
-            if (other.lastUpdateDate != null) {
-                return false;
-            }
-        } else if (!lastUpdateDate.equals(other.lastUpdateDate)) {
-            return false;
-        }
-        if (section == null) {
-            if (other.section != null) {
-                return false;
-            }
-        } else if (!section.equals(other.section)) {
-            return false;
-        }
-        if (title == null) {
-            if (other.title != null) {
-                return false;
-            }
-        } else if (!title.equals(other.title)) {
-            return false;
-        }
-        if (user == null) {
-            if (other.user != null) {
-                return false;
-            }
-        } else if (!user.equals(other.user)) {
-            return false;
-        }
-        if (views != other.views) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
