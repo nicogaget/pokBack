@@ -1,6 +1,8 @@
 package com.pc3v.back.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity(name="rencontres")
 @Table(name="rencontres")
 public class Rencontre {
@@ -20,6 +29,7 @@ public class Rencontre {
 	 private Long id;
 	 private Competition competition;
 	 private Date date;
-	 private int nbrInscription;
+	 private Set<User> joueursInscrits=new HashSet<>();
+	 private Resultat resultat;
 	 
 }
